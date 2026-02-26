@@ -1,0 +1,23 @@
+# how to create virtual environment using pip
+
+
+1. install pip install virtualenv
+
+create the virtual environment
+
+py -m venv #name of your environment
+
+
+
+Activate the environment 
+
+#name of _env\Scripts\Activate
+
+
+NB name_of env\Scripts\deactivate
+
+To install all the necessary packages 
+
+pip install -r requirements.txt
+
+pip freeze > requirement.txt

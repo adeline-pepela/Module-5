@@ -1,0 +1,5 @@
+pip install streamlit 
+
+#run
+
+streamlit run #name of file
