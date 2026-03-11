@@ -29,16 +29,24 @@ A complete machine learning system for predicting customer churn in the telecomm
 
 ## 🚀 Quick Start
 
-### Option 1: Docker (Recommended)
+### Option 1: Docker (Recommended - Easiest)
+
+**One command deployment:**
 
 ```bash
 cd deployment
-docker-compose up -d
+./scripts/deploy.sh          # Linux/Mac
+# OR
+scripts\deploy.bat           # Windows
 ```
 
 Access: **http://localhost:8000**
 
-See [DOCKER_GUIDE.md](deployment/DOCKER_GUIDE.md) for details.
+**Prerequisites:** Docker & Docker Compose installed  
+**Time:** 5-10 minutes (first time)  
+**See:** [deployment/docs/DOCKER_README.md](deployment/docs/DOCKER_README.md)
+
+---
 
 ### Option 2: Manual Setup
 

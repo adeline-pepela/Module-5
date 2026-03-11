@@ -2,6 +2,31 @@
 
 ## For Anyone Cloning This Repository
 
+### Method 1: Docker (Easiest - Recommended)
+
+```bash
+# Clone repository
+git clone https://github.com/adeline-pepela/Module-5.git
+cd "Module-5/Predictive and Optimization Analytics/POA-Project/Churn-main/deployment"
+
+# Deploy (choose your OS)
+./scripts/deploy.sh          # Linux/Mac
+# OR
+scripts\deploy.bat           # Windows
+```
+
+**That's it!** Access: http://localhost:8000
+
+**Prerequisites:**
+- Docker installed ([Get Docker](https://docs.docker.com/get-docker/))
+- Docker Compose installed (usually included with Docker)
+
+**Time:** 5-10 minutes first run, 30 seconds after that
+
+---
+
+### Method 2: Manual Setup (Advanced)
+
 ### 1️⃣ Clone & Navigate
 ```bash
 git clone https://github.com/adeline-pepela/Module-5.git
