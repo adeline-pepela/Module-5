@@ -147,4 +147,4 @@ print(response.json())
 - Review API docs at http://localhost:8000/docs
 - Check logs for error messages
 
-Happy Predicting! 🎉
+Happy Predicting! 
