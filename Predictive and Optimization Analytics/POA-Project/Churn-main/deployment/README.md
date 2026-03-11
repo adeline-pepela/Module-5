@@ -1,514 +1,293 @@
-# Telecom Churn Prediction Deployment System
+# 🚀 Churn Prediction System - Deployment
 
-A production-ready, **database-driven** machine learning deployment for predicting customer churn in the telecommunication industry using FastAPI backend, SQLAlchemy ORM, and modern web frontend.
+Complete deployment package for the Customer Churn Prediction System.
 
-## 🎯 Key Features
+---
 
-### ✅ Dynamic Database System (NEW)
-- **Real Data**: Loads 8,453 customers from GitHub CSV into SQLite/PostgreSQL
-- **Live Predictions**: All predictions saved to database with timestamps
-- **Intervention Tracking**: Track retention campaigns and outcomes
-- **Model Governance**: Version control, performance monitoring, audit trails
+## 📦 Quick Start
 
-### Executive Dashboard
-- **KPI Cards**: Real-time metrics for total customers, churn rate, at-risk customers, revenue at risk, prevention rate, and campaign efficiency
-- **Trend Visualizations**: Monthly churn trends, risk distribution, and segment analysis
-- **Dynamic Updates**: Auto-refreshing dashboards with live data
+### One-Command Deployment
 
-### Risk Segmentation Panel
-- **Customer Risk Buckets**: Ultra High (>80%), High (60-80%), Medium (40-60%), Low (<40%)
-- **Advanced Filters**: Filter by segment (SOHO/SME/VSE), revenue range, account manager, geography, and risk level
-- **Actionable Insights**: Prioritized customer lists for retention teams
+**Linux/Mac:**
+```bash
+./scripts/deploy.sh
+```
 
-### Customer Detail View
-- **Comprehensive Profile**: Customer ID, segment, revenue, ARPU, subscriber counts, risk score
-- **Explainability**: Top 3 churn drivers with SHAP-based feature importance
-- **Trust Building**: Transparent model predictions with clear reasoning
+**Windows:**
+```cmd
+scripts\deploy.bat
+```
 
-### Real-Time Prediction
-- **Single Customer Scoring**: Instant churn probability calculation
-- **Batch Processing**: CSV upload for bulk predictions
-- **Risk Assessment**: Automatic risk level assignment with recommended actions
+**Access:** http://localhost:8000
 
-### Model Monitoring
-- **Performance Tracking**: F1 score, recall, precision, PR-AUC metrics
-- **Drift Detection**: Automated alerts for data/model drift
-- **Governance**: Model version, retrain dates, feature counts, sampling strategy
+---
 
-## 📁 Project Structure
+## 📁 Folder Structure
 
 ```
 deployment/
-├── backend/
+├── backend/                    # FastAPI application
 │   ├── app/
-│   │   ├── api/
-│   │   │   ├── dashboard.py      # Dashboard endpoints
-│   │   │   ├── prediction.py     # Prediction endpoints
-│   │   │   └── monitoring.py     # Monitoring endpoints
-│   │   ├── models/
-│   │   │   └── schemas.py        # Pydantic models
-│   │   ├── services/
-│   │   │   └── predictor.py      # ML model service
-│   │   └── __init__.py
-│   └── main.py                   # FastAPI application
-├── frontend/
+│   │   ├── api/               # API endpoints
+│   │   ├── database/          # Database models & scripts
+│   │   ├── models/            # Pydantic schemas
+│   │   └── services/          # ML model service
+│   ├── main.py                # Application entry point
+│   └── churn_prediction.db    # SQLite database
+│
+├── frontend/                   # Web interface
 │   ├── static/
-│   │   ├── css/
-│   │   │   └── styles.css        # Styling
-│   │   └── js/
-│   │       └── app.js            # Frontend logic
+│   │   ├── css/               # Stylesheets
+│   │   └── js/                # JavaScript
 │   └── templates/
-│       └── index.html            # Main dashboard
-├── data/                         # Data storage
-├── requirements.txt              # Python dependencies
-└── README.md                     # This file
+│       └── index.html         # Main dashboard
+│
+├── models/                     # ML models
+│   └── best_model.pkl         # Trained model (896KB)
+│
+├── data/                       # Sample data
+│   └── sample_batch.csv       # Example CSV
+│
+├── docs/                       # Documentation
+│   ├── DOCKER_README.md       # Docker quick start
+│   ├── DOCKER_GUIDE.md        # Comprehensive Docker guide
+│   ├── DEPLOYMENT_GUIDE.md    # Detailed deployment
+│   ├── BULK_PREDICTION_FORMAT.md  # CSV format
+│   ├── DATABASE_GUIDE.md      # Database schema
+│   ├── ARCHITECTURE.md        # System architecture
+│   ├── REPLICATION_VERIFIED.md    # Test results
+│   └── ...                    # More documentation
+│
+├── scripts/                    # Deployment scripts
+│   ├── deploy.sh              # Linux/Mac deployment
+│   ├── deploy.bat             # Windows deployment
+│   ├── test-docker.sh         # Docker validation
+│   ├── create_sample_csv.py   # Generate sample data
+│   ├── setup_database.py      # Database setup
+│   └── ...                    # More scripts
+│
+├── Dockerfile                  # Docker container definition
+├── docker-compose.yml          # Docker orchestration
+├── docker-entrypoint.sh        # Container initialization
+├── .dockerignore              # Docker build exclusions
+├── requirements.txt           # Python dependencies
+├── .env.example               # Environment template
+├── bulk_prediction_template.csv   # Sample CSV with real data
+└── README.md                  # This file
 ```
 
-## 🚀 Quick Start (Database Setup)
+---
 
-### Option 1: Automated Setup (Recommended)
+## 🐳 Docker Deployment (Recommended)
+
+### Prerequisites
+- Docker 20.10+
+- Docker Compose 2.0+
+
+### Deploy
 ```bash
 cd deployment
-python setup_database.py
+./scripts/deploy.sh
 ```
 
-This will:
-1. Install all dependencies
-2. Create database and load 8,453 customers from CSV
-3. Generate predictions for all customers
-4. Initialize model metrics
-
-### Option 2: Manual Setup
-
-1. **Install dependencies**
+### Verify
 ```bash
-cd deployment/backend
-pip install -r requirements.txt
+curl http://localhost:8000/api/dashboard/metrics
 ```
 
-2. **Load customer data**
-```bash
-cd app
-python -m database.load_data
-```
+### Documentation
+See [docs/DOCKER_README.md](docs/DOCKER_README.md)
 
-3. **Generate predictions**
-```bash
-python -m database.generate_predictions
-```
+---
 
-4. **Start server**
-```bash
-cd ..
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-5. **Access dashboard**
-```
-http://localhost:8000
-```
-
-## 📊 Database Schema
-
-### Tables
-
-**customers** - Master customer data (8,453 records)
-- PID, segment, revenue, ARPU, subscribers, churn status
-- Loaded from: https://raw.githubusercontent.com/adeline-pepela/Dissertation/main/data/dataset.csv
-
-**predictions** - ML predictions with timestamps
-- churn_probability, risk_level, top_drivers, model_version
-- Automatically generated for all customers
-
-**interventions** - Retention action tracking
-- assigned_manager, intervention_type, customer_response, retention_outcome
-- Supports A/B testing and ROI measurement
-
-**model_metrics** - Performance monitoring
-- f1_score, recall, precision, training_date, is_active
-- Current: F1=0.1286, Recall=0.3818, Precision=0.0773
-
-## 🚀 Installation (Legacy)
+## 🔧 Manual Deployment
 
 ### Prerequisites
 - Python 3.8+
-- pip package manager
-- Trained ML model file (best_model.pkl)
+- pip
 
-### Setup Steps
-
-1. **Clone the repository**
+### Setup
 ```bash
-cd deployment
-```
-
-2. **Create virtual environment**
-```bash
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
 
-3. **Install dependencies**
-```bash
+# Install dependencies
 pip install -r requirements.txt
+
+# Setup database
+cd backend
+python -m app.database.load_data
+python -m app.database.generate_predictions
+python -m app.database.save_model_comparison
+python -m app.database.save_feature_importance
+
+# Start application
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-4. **Copy your trained model**
+### Documentation
+See [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [DOCKER_README.md](docs/DOCKER_README.md) | Docker quick start guide |
+| [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md) | Comprehensive Docker documentation |
+| [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) | Detailed deployment instructions |
+| [BULK_PREDICTION_FORMAT.md](docs/BULK_PREDICTION_FORMAT.md) | CSV format specification |
+| [DATABASE_GUIDE.md](docs/DATABASE_GUIDE.md) | Database schema & setup |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture overview |
+| [REPLICATION_VERIFIED.md](docs/REPLICATION_VERIFIED.md) | Deployment test results |
+
+---
+
+## 🛠️ Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/deploy.sh` | One-command deployment (Linux/Mac) |
+| `scripts/deploy.bat` | One-command deployment (Windows) |
+| `scripts/test-docker.sh` | Validate Docker setup |
+| `scripts/create_sample_csv.py` | Generate sample CSV |
+| `scripts/setup_database.py` | Initialize database |
+
+---
+
+## 🎯 What's Included
+
+### Application
+- ✅ FastAPI backend with 15+ endpoints
+- ✅ Interactive web dashboard (7 pages)
+- ✅ SQLite database with 8,436 customers
+- ✅ Trained ML model (EasyEnsembleClassifier)
+- ✅ Real-time predictions
+- ✅ Bulk CSV processing
+
+### Data
+- ✅ 8,436 customer records
+- ✅ 8,436 predictions
+- ✅ 11 model comparisons
+- ✅ 22 feature importance scores
+- ✅ Confusion matrix data
+- ✅ ROC/PR curve data
+
+### Features
+- ✅ Dashboard with KPIs
+- ✅ Customer search & filter
+- ✅ Risk analysis
+- ✅ Single prediction
+- ✅ Bulk prediction (CSV)
+- ✅ Model evaluation
+- ✅ Intervention tracking
+- ✅ CSV export
+
+---
+
+## 🔍 Verification
+
+After deployment, verify:
+
 ```bash
-# Place your best_model.pkl in the models directory
-cp ../models/best_model.pkl ./models/
-```
+# Container status (Docker)
+docker ps | grep churn-prediction
 
-5. **Run the application**
-```bash
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-```
+# API test
+curl http://localhost:8000/api/dashboard/metrics
 
-6. **Access the dashboard**
-```
-Open browser: http://localhost:8000
-```
-
-## 📊 API Documentation (Database-Driven)
-
-### Dashboard Endpoints (Dynamic Data)
-
-#### Get Dashboard Metrics (From Database)
-```http
-GET /api/dashboard/metrics
-```
-Returns:
-- Total customers (live count)
-- Churn rate (calculated from actual data)
-- At-risk customers (from predictions table)
-- Revenue at risk (aggregated from customer revenue)
-- Prevention rate (from model_metrics)
-- Campaign efficiency (from model_metrics)
-
-#### Get At-Risk Customers (Filtered Query)
-```http
-GET /api/dashboard/customers/at-risk?risk_level=High&segment=SME&limit=100
-```
-Filters:
-- risk_level: Ultra High, High, Medium, Low
-- segment: SOHO, SME, VSE
-- limit: Max results
-
-Returns customers with predictions from database
-
-#### Get Customer Detail (With Predictions)
-```http
-GET /api/dashboard/customer/{customer_id}
-```
-Returns:
-- Customer profile from database
-- Latest prediction with top drivers
-- Intervention history
-
-### Intervention Endpoints (NEW)
-
-#### Create Intervention
-```http
-POST /api/interventions
-Content-Type: application/json
-
+# Expected response
 {
-  "customer_id": "PID123",
-  "assigned_manager": "John Doe",
-  "intervention_type": "Personalized Offer",
-  "offer_type": "20% Discount",
-  "notes": "High-value customer retention"
+  "total_customers": 8436,
+  "current_churn_rate": 0.0646,
+  "predicted_at_risk": 7,
+  "revenue_at_risk": 1224.34,
+  "prevention_rate": 0.3818,
+  "campaign_efficiency": 0.0773
 }
 ```
 
-#### Update Intervention Outcome
-```http
-PUT /api/interventions/{intervention_id}
-Content-Type: application/json
+---
 
-{
-  "customer_response": "Accepted",
-  "retention_outcome": "Retained",
-  "notes": "Customer renewed contract"
-}
-```
+## 📊 System Requirements
 
-#### Get Customer Interventions
-```http
-GET /api/interventions/{customer_id}
-```
-Returns all interventions for a customer
+### Minimum
+- 2 GB RAM
+- 2 GB disk space
+- Docker 20.10+ (for Docker deployment)
+- Python 3.8+ (for manual deployment)
 
-### Prediction Endpoints (Saves to Database)
+### Recommended
+- 4 GB RAM
+- 5 GB disk space
+- Docker 24.0+
+- Python 3.11+
 
-#### Single Customer Prediction
-```http
-POST /api/prediction/predict
-Content-Type: application/json
+---
 
-{
-  "customer_id": "CUST1001",
-  "segment": "SME",
-  "active_subscribers": 50,
-  "suspended_subscribers": 5,
-  "total_subscribers": 55,
-  "arpu": 15000,
-  "average_mobile_revenue": 750000,
-  "average_fix_revenue": 75000
-}
-```
+## 🆘 Troubleshooting
 
-#### Batch Prediction
-```http
-POST /api/prediction/predict-batch
-Content-Type: multipart/form-data
-
-file: customers.csv
-```
-
-### Monitoring Endpoints
-
-#### Get Model Metrics
-```http
-GET /api/monitoring/model-metrics
-```
-Returns current model performance metrics
-
-#### Get Performance Trend
-```http
-GET /api/monitoring/performance-trend?months=6
-```
-Returns historical performance data
-
-## 🎨 Frontend Usage
-
-### Navigation
-- **Dashboard**: Executive KPIs and trends
-- **Risk Analysis**: Customer segmentation and filtering
-- **Prediction**: Real-time and batch scoring
-- **Monitoring**: Model performance tracking
-
-### Making Predictions
-
-1. Navigate to **Prediction** tab
-2. Fill in customer details
-3. Click **Predict Churn**
-4. View results with:
-   - Churn probability
-   - Risk level
-   - Top churn drivers
-   - Recommended action
-
-### Batch Processing
-
-1. Prepare CSV file with columns:
-   - customer_id, segment, active_subscribers, suspended_subscribers, total_subscribers, arpu, average_mobile_revenue, average_fix_revenue
-2. Upload file in **Batch Prediction** section
-3. Download results as CSV
-
-## 🔧 Configuration
-
-### Database Configuration
-
-**SQLite (Default)**
-```python
-DATABASE_URL = "sqlite:///./churn_prediction.db"
-```
-
-**PostgreSQL (Production)**
+### Port 8000 in use
 ```bash
-export DATABASE_URL="postgresql://user:password@localhost:5432/churn_db"
+# Change port in docker-compose.yml
+ports:
+  - "9000:8000"
 ```
 
-### Data Source
-```python
-CSV_URL = "https://raw.githubusercontent.com/adeline-pepela/Dissertation/main/data/dataset.csv"
-```
-
-### Model Path
-Update model path in `backend/app/services/predictor.py`:
-```python
-def __init__(self, model_path: str = "../models/best_model.pkl"):
-```
-
-### Feature Names
-Ensure feature names match your training pipeline in `predictor.py`:
-```python
-def _get_feature_names(self) -> List[str]:
-    return [
-        'Active subscribers', 'Not Active subscribers', ...
-    ]
-```
-
-### API Base URL
-Update in `frontend/static/js/app.js` if deploying to different host:
-```javascript
-const API_BASE = '/api';
-```
-
-## 📈 Data Flow
-
-1. **CSV → Database**: `load_data.py` imports 8,453 customers
-2. **Prediction → Database**: Each prediction saved with timestamp and drivers
-3. **Dashboard → Database**: Real-time queries for metrics and customer lists
-4. **Intervention → Database**: Track retention campaigns and measure ROI
-
-## 🎯 Use Cases
-
-### 1. Executive Dashboard
-- View real-time churn metrics from database
-- Monitor revenue at risk by segment
-- Track model performance over time
-
-### 2. Retention Team
-- Filter high-risk customers by segment/manager
-- Create intervention campaigns
-- Track customer responses and outcomes
-
-### 3. Data Science Team
-- Monitor model drift
-- Compare model versions
-- Analyze feature importance trends
-
-### 4. Business Intelligence
-- Export prediction data for reporting
-- Calculate campaign ROI
-- Segment analysis and trends
-
-## 📈 Model Performance
-
-- **F1 Score**: 0.1286
-- **Recall**: 0.3818 (38.18% Churn Prevention Rate)
-- **Precision**: 0.0773
-- **ROC-AUC**: 0.5510
-- **PR-AUC**: 0.0786
-- **Sampling Strategy**: SVMSMOTE
-- **Features**: 22 (3 categorical + 19 numerical)
-
-## 🔒 Security & Production
-
-### Database Security
-- Use PostgreSQL with SSL in production
-- Implement row-level security
-- Regular backups: `sqlite3 churn_prediction.db ".backup backup.db"`
-
-### API Security
-
-- Implement authentication/authorization for production
-- Add rate limiting to API endpoints
-- Validate and sanitize all inputs
-- Use HTTPS in production
-- Implement CORS properly for specific origins
-- Add logging and monitoring
-
-## 🚢 Production Deployment
-
-### Database Migration
+### Docker not running
 ```bash
-# Upgrade to PostgreSQL
-export DATABASE_URL="postgresql://user:pass@host:5432/churn_db"
-pip install psycopg2-binary
-python -m database.load_data
+# Linux
+sudo systemctl start docker
+
+# Mac/Windows
+# Start Docker Desktop
 ```
 
-### Docker Deployment
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-### Environment Variables
+### Build fails
 ```bash
-DATABASE_URL=postgresql://user:pass@host:5432/churn_db
-MODEL_PATH=/app/models/best_model.pkl
-API_HOST=0.0.0.0
-API_PORT=8000
-LOG_LEVEL=info
+docker-compose down -v
+docker system prune -a
+docker-compose build --no-cache
 ```
 
-## 📚 Additional Documentation
-
-- **DATABASE_GUIDE.md**: Comprehensive database setup and usage
-- **ARCHITECTURE.md**: System architecture and design
-- **QUICKSTART.md**: Quick start guide
-
-## 🛠️ Maintenance
-
-### Backup Database
-```bash
-sqlite3 churn_prediction.db ".backup backup_$(date +%Y%m%d).db"
-```
-
-### Update Model Metrics
-```python
-from app.database.models import ModelMetrics
-metrics = db.query(ModelMetrics).filter_by(is_active=True).first()
-metrics.f1_score = 0.15
-db.commit()
-```
-
-### Clear Old Predictions
-```python
-from datetime import datetime, timedelta
-old_date = datetime.utcnow() - timedelta(days=90)
-db.query(Prediction).filter(Prediction.predicted_at < old_date).delete()
-db.commit()
-```
-
-## 🐛 Troubleshooting
-
-### Database Issues
-- **Database locked**: Close other connections, use WAL mode
-- **Missing data**: Run `python -m database.load_data` again
-- **Slow queries**: Add indexes on frequently queried columns
-
-### Prediction Issues
-- **No predictions**: Run `python -m database.generate_predictions`
-- **Model errors**: Check model file path and sklearn version
-- **Feature mismatch**: Verify feature names match training data
+---
 
 ## 📞 Support
 
 For issues:
-1. Check DATABASE_GUIDE.md
-2. Verify CSV data accessibility
-3. Review API docs at http://localhost:8000/docs
-4. Check database logs
+1. Check [docs/DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md)
+2. View logs: `docker-compose logs -f`
+3. Test API: `curl http://localhost:8000/api/dashboard/metrics`
 
-## 🎓 Project Context
+---
 
+## 🎓 For Dissertation
+
+This deployment demonstrates:
+- ✅ Production-ready ML system
+- ✅ Containerized deployment
+- ✅ Easy replication (one command)
+- ✅ Complete documentation
+- ✅ Real data integration
+- ✅ Interactive visualization
+
+---
+
+**Author**: Adeline Makokha  
+**Adm No**: 191199  
 **Course**: DSA 8502 Predictive and Optimization Analytics  
-**Institution**: Strathmore University  
-**Dataset**: 8,453 telecom business customers (24-month period)  
-**Data Source**: https://raw.githubusercontent.com/adeline-pepela/Dissertation/main/data/dataset.csv
+**Institution**: Strathmore University
 
-### Research Objectives
-1. Apply ML techniques for churn prediction
-2. Compare multiple algorithms (Logistic Regression, Random Forest, Gradient Boosting, EasyEnsemble)
-3. Identify influential features for retention strategies
-4. Demonstrate proactive decision-making framework
+---
 
-### Hypothesis
-**H₁**: Customer behavior, demographics, and service patterns can effectively predict churn using ML models
+## 🚀 Get Started
 
-## 📝 License
+```bash
+cd deployment
+./scripts/deploy.sh
+```
 
-This project is part of the DSA 8502 Predictive and Optimization Analytics course.
-
-## 👥 Author
-
-**Adeline Makokha**  
-Adm No: 191199  
-Course: DSA 8502 Predictive and Optimization Analytics
-
-## 🤝 Contributing
-
-For improvements or bug fixes, please create an issue or pull request.
-
-## 📞 Support
-
-For questions or support, contact the development team.
+Open: http://localhost:8000

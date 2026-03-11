@@ -29,12 +29,26 @@ A complete machine learning system for predicting customer churn in the telecomm
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Python 3.8+
-- pip
-- Git
+### Option 1: Docker (Recommended - Easiest)
 
-### Installation
+**One command deployment:**
+
+```bash
+cd deployment
+./scripts/deploy.sh          # Linux/Mac
+# OR
+scripts\deploy.bat           # Windows
+```
+
+Access: **http://localhost:8000**
+
+**Prerequisites:** Docker & Docker Compose installed  
+**Time:** 5-10 minutes (first time)  
+**See:** [deployment/docs/DOCKER_README.md](deployment/docs/DOCKER_README.md)
+
+---
+
+### Option 2: Manual Setup
 
 ```bash
 # 1. Clone the repository
@@ -64,6 +78,11 @@ python -m app.database.save_feature_importance
 # 6. Start the application
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+### Prerequisites for Manual Setup
+- Python 3.8+
+- pip
+- Git
 
 ### Access the Dashboard
 Open browser: **http://localhost:8000**
