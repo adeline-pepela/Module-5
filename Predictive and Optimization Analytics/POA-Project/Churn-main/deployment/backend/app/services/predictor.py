@@ -92,6 +92,35 @@ class ChurnPredictor:
         
         return X
     
+    def predict(self, customer_data: Dict) -> Tuple[float, str]:
+        """
+        Predict churn probability for a customer
+        
+        Args:
+            customer_data: Customer features dictionary
+            
+        Returns:
+            Tuple of (churn_probability, risk_level)
+        """
+        try:
+            X = self.preprocess_input(customer_data)
+            churn_prob = float(self.model.predict_proba(X)[0][1])
+            
+            # Determine risk level
+            if churn_prob > 0.8:
+                risk_level = "Ultra High"
+            elif churn_prob > 0.6:
+                risk_level = "High"
+            elif churn_prob > 0.4:
+                risk_level = "Medium"
+            else:
+                risk_level = "Low"
+            
+            return churn_prob, risk_level
+        except Exception as e:
+            print(f"Prediction error: {e}")
+            raise
+    
     def predict_and_save(self, customer_data: Dict, db: Session) -> Tuple[float, str]:
         """
         Predict churn and save to database

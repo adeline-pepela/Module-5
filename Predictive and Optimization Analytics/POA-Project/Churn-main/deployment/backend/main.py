@@ -49,10 +49,14 @@ app.include_router(evaluation_router, tags=["Evaluation"])
 @app.get("/", response_class=HTMLResponse)
 async def root():
     """Serve the main dashboard page"""
-    html_path = Path("../frontend/templates/index.html")
-    if html_path.exists():
-        return html_path.read_text()
-    return "<h1>Churn Prediction API</h1><p>Visit /docs for API documentation</p>"
+    try:
+        html_path = Path("../frontend/templates/index.html")
+        if html_path.exists():
+            return html_path.read_text(encoding='utf-8')
+        else:
+            return "<h1>Churn Prediction API</h1><p>Visit <a href='/docs'>/docs</a> for API documentation</p><p>HTML file not found at: " + str(html_path.absolute()) + "</p>"
+    except Exception as e:
+        return f"<h1>Error Loading Dashboard</h1><p>{str(e)}</p><p>Visit <a href='/docs'>/docs</a> for API documentation</p>"
 
 @app.get("/health")
 async def health_check():
