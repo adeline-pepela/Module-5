@@ -270,7 +270,7 @@ https://github.com/adeline-pepela/Module-5.git
 
 **Branch:**
 ```
-obote
+main
 ```
 
 **Clone Command:**

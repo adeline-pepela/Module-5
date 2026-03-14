@@ -1,16 +1,16 @@
-FROM python:3.11-slim
+FROM --platform=linux/amd64 python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies with retries
+RUN apt-get update -o Acquire::Retries=5 && apt-get install -y \
     gcc \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
-COPY requirements.txt .
-RUN pip install --no-cache-dir --timeout=300 -r requirements.txt
+COPY requirements_no_shap.txt ./requirements.txt
+RUN pip install --no-cache-dir --timeout=300 --retries=5 -r requirements.txt
 
 # Copy application code
 COPY backend/ ./backend/
